@@ -1,5 +1,6 @@
 package com.karntrehan.posts.osapps.di
 
+import android.app.Application
 import android.arch.persistence.room.Room
 import android.content.Context
 import com.karntrehan.posts.commons.data.local.PostDb
@@ -18,74 +19,33 @@ import com.karntrehan.posts.list.model.ListRemoteData
 import com.karntrehan.posts.list.model.ListRepository
 import com.karntrehan.posts.list.viewmodel.ListViewModelFactory
 import com.squareup.picasso.Picasso
+import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
+import dagger.android.support.DaggerApplication
 import io.reactivex.disposables.CompositeDisposable
 import retrofit2.Retrofit
 
 //todo: to move AndroidSupportInjectionModule::class to core!
 @AppScope
-@Component(dependencies = [CoreComponent::class], modules = [HappyModule::class, AndroidSupportInjectionModule::class, ActivityBuilder::class])
-interface AppComponent {
+@Component(dependencies = [CoreComponent::class],
+        modules = [AndroidSupportInjectionModule::class, ActivityBuilder::class])
+interface AppComponent: AndroidInjector<DaggerApplication> {
 
-    //Expose to dependent components
-    fun postDb(): PostDb
-
-    fun postService(): PostService
-    fun picasso(): Picasso
-    fun scheduler(): Scheduler
-
-    fun inject(listActivity: ListActivity)
+    //a generic builder
+    override fun inject(instance: DaggerApplication)
 
 
     @Component.Builder
     interface Builder {
+        @BindsInstance
+        fun application(application: Application): Builder
         fun coreComponent(coreComponent: CoreComponent): Builder
         fun build(): AppComponent
     }
 
 
-}
-
-@Module
-@AppScope
-class HappyModule {
-
-    /*Adapter*/
-    @Provides
-    @AppScope
-    fun adapter(picasso: Picasso): ListAdapter = ListAdapter(picasso)
-
-    /*ViewModel*/
-    @Provides
-    @AppScope
-    fun listViewModelFactory(repository: ListDataContract.Repository,compositeDisposable: CompositeDisposable): ListViewModelFactory = ListViewModelFactory(repository,compositeDisposable)
-
-    /*Repository*/
-    @Provides
-    @AppScope
-    fun listRepo(local: ListDataContract.Local, remote: ListDataContract.Remote, scheduler: Scheduler, compositeDisposable: CompositeDisposable): ListDataContract.Repository = ListRepository(local, remote, scheduler, compositeDisposable)
-
-    @Provides
-    @AppScope
-    fun remoteData(postService: PostService): ListDataContract.Remote = ListRemoteData(postService)
-
-    @Provides
-    @AppScope
-    fun localData(postDb: PostDb, scheduler: Scheduler): ListDataContract.Local = ListLocalData(postDb, scheduler)
-
-    @Provides
-    @AppScope
-    fun compositeDisposable(): CompositeDisposable = CompositeDisposable()
-
-    /*Parent providers to dependents*/
-    @Provides
-    @AppScope
-    fun postDb(context: Context): PostDb = Room.databaseBuilder(context, PostDb::class.java, Constants.Posts.DB_NAME).build()
-
-    @Provides
-    @AppScope
-    fun postService(retrofit: Retrofit): PostService = retrofit.create(PostService::class.java)
 }
