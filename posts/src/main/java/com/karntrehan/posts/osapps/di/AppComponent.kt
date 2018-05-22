@@ -7,8 +7,10 @@ import com.karntrehan.posts.commons.data.remote.PostService
 import com.karntrehan.posts.core.constants.Constants
 import com.karntrehan.posts.core.di.CoreComponent
 import com.karntrehan.posts.core.networking.Scheduler
+import com.karntrehan.posts.details.di.DetailsComponent
 import com.karntrehan.posts.list.ListActivity
 import com.karntrehan.posts.list.ListAdapter
+import com.karntrehan.posts.list.di.ListComponent
 import com.karntrehan.posts.list.di.ListModule
 import com.karntrehan.posts.list.model.ListDataContract
 import com.karntrehan.posts.list.model.ListLocalData
@@ -36,6 +38,13 @@ interface AppComponent {
     fun scheduler(): Scheduler
 
     fun inject(listActivity: ListActivity)
+
+
+    @Component.Builder
+    interface Builder {
+        fun coreComponent(coreComponent: CoreComponent): Builder
+        fun build(): AppComponent
+    }
 
 
 }
