@@ -19,11 +19,13 @@ import com.squareup.picasso.Picasso
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import dagger.android.support.AndroidSupportInjectionModule
 import io.reactivex.disposables.CompositeDisposable
 import retrofit2.Retrofit
 
+//todo: to move AndroidSupportInjectionModule::class to core!
 @AppScope
-@Component(dependencies = [CoreComponent::class], modules = [HappyModule::class])
+@Component(dependencies = [CoreComponent::class], modules = [HappyModule::class, AndroidSupportInjectionModule::class, ActivityBuilder::class])
 interface AppComponent {
 
     //Expose to dependent components
@@ -34,6 +36,8 @@ interface AppComponent {
     fun scheduler(): Scheduler
 
     fun inject(listActivity: ListActivity)
+
+
 }
 
 @Module

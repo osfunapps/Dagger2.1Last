@@ -31,10 +31,8 @@ interface DetailsComponent {
 
     @Component.Builder
     interface Builder {
-
         fun listComponent(listComponent: ListComponent): Builder
         fun build(): DetailsComponent
-
     }
 
 }

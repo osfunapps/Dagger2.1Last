@@ -53,6 +53,11 @@ interface ListComponent {
     fun inject(listActivity: ListActivity)
 
 
+    @Component.Builder
+    interface Builder {
+        fun coreComponent(coreComponent: CoreComponent): Builder
+        fun build(): ListComponent
+    }
     //fun detailBuilder(detailsComponent: DetailsComponent): DetailsComponent.Builder
 }
 
@@ -69,7 +74,7 @@ class ListModule {
     /*ViewModel*/
     @Provides
     @ListScope
-    fun listViewModelFactory(repository: ListDataContract.Repository,compositeDisposable: CompositeDisposable): ListViewModelFactory = ListViewModelFactory(repository,compositeDisposable)
+    fun listViewModelFactory(repository: ListDataContract.Repository, compositeDisposable: CompositeDisposable): ListViewModelFactory = ListViewModelFactory(repository,compositeDisposable)
 
     /*Repository*/
     @Provides
