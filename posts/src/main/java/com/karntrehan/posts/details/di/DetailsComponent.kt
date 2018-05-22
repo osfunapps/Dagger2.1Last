@@ -1,5 +1,8 @@
 package com.karntrehan.posts.details.di
 
+import android.app.Application
+import android.content.Context
+import com.karntrehan.posts.App
 import com.karntrehan.posts.commons.data.local.PostDb
 import com.karntrehan.posts.commons.data.remote.PostService
 import com.karntrehan.posts.core.networking.Scheduler
@@ -11,6 +14,9 @@ import com.karntrehan.posts.details.model.DetailsRemoteData
 import com.karntrehan.posts.details.model.DetailsRepository
 import com.karntrehan.posts.details.viewmodel.DetailsViewModelFactory
 import com.karntrehan.posts.list.di.ListComponent
+import com.karntrehan.posts.list.di.ListModule
+import com.squareup.picasso.Picasso
+import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -19,7 +25,18 @@ import io.reactivex.disposables.CompositeDisposable
 @DetailsScope
 @Component(dependencies = [ListComponent::class], modules = [DetailsModule::class])
 interface DetailsComponent {
-    fun inject(detailsActivity: DetailsActivity)
+
+
+    fun inject(instance: DetailsActivity)
+
+    @Component.Builder
+    interface Builder {
+
+        fun listComponent(listComponent: ListComponent): Builder
+        fun build(): DetailsComponent
+
+    }
+
 }
 
 @Module

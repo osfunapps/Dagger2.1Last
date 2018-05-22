@@ -2,11 +2,13 @@ package com.karntrehan.posts.list.di
 
 import android.arch.persistence.room.Room
 import android.content.Context
+import android.transition.Scene
 import com.karntrehan.posts.commons.data.local.PostDb
 import com.karntrehan.posts.commons.data.remote.PostService
 import com.karntrehan.posts.core.constants.Constants
 import com.karntrehan.posts.core.di.CoreComponent
 import com.karntrehan.posts.core.networking.Scheduler
+import com.karntrehan.posts.details.di.DetailsComponent
 import com.karntrehan.posts.list.ListActivity
 import com.karntrehan.posts.list.ListAdapter
 import com.karntrehan.posts.list.model.ListDataContract
@@ -22,11 +24,26 @@ import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
 import retrofit2.Retrofit
 
+/**
+ * where i stopped:
+ * 1) go to this link:
+ * *https://medium.com/@mydogtom/modularization-part-2-dagger-structure-5c2daf5e849c
+
+ *or this
+ * https://proandroiddev.com/dagger-2-part-ii-custom-scopes-component-dependencies-subcomponents-697c1fa1cfc
+ *
+ * or this
+ * https://proandroiddev.com/dagger-2-component-relationships-custom-scopes-8d7e05e70a37
+ *
+ * and read about component dependency. I guess I Just implemented it wrong.
+ * search:
+
+ */
 @ListScope
 @Component(dependencies = [CoreComponent::class], modules = [ListModule::class])
 interface ListComponent {
 
-    //Expose to dependent components
+    //*/Expose to dependent components
     fun postDb(): PostDb
 
     fun postService(): PostService
@@ -34,7 +51,11 @@ interface ListComponent {
     fun scheduler(): Scheduler
 
     fun inject(listActivity: ListActivity)
+
+
+    //fun detailBuilder(detailsComponent: DetailsComponent): DetailsComponent.Builder
 }
+
 
 @Module
 @ListScope

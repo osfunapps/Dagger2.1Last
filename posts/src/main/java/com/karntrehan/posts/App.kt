@@ -12,13 +12,13 @@ import com.karntrehan.posts.osapps.di.DaggerAppComponent
 
 class App : Application() {
 
-   private lateinit var appComponent: AppComponent
+    private lateinit var appComponent: AppComponent
 
 
     override fun onCreate() {
         super.onCreate()
         initCoreDI(this)
-      initAppComponent()
+        initAppComponent()
     }
 
     private fun initAppComponent() {
